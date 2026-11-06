@@ -221,4 +221,7 @@ STRINGS = {
 STACK = ["Python", "Django", "PostgreSQL", "nginx", "Linux", "Cloudflare"]
 
 LANGUAGE_NAMES = {"uz": "Özbekça", "ru": "Русский", "en": "English"}
+# The short label on the language switcher pill, each in its own script:
+# new Uzbek Latin for Uzbek, Cyrillic for Russian, Latin for English.
+LANGUAGE_LABELS = {"uz": "ÖZ", "ru": "РУ", "en": "EN"}
 OG_LOCALES = {"uz": "uz_UZ", "ru": "ru_RU", "en": "en_US"}

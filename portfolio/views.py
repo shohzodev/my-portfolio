@@ -8,7 +8,15 @@ from django.utils.cache import patch_vary_headers
 from django.utils.safestring import mark_safe
 from django.views.decorators.http import require_GET
 
-from .content import DEFAULT_LANGUAGE, LANGUAGE_NAMES, OG_LOCALES, STACK, STRINGS, SUPPORTED_LANGUAGES
+from .content import (
+    DEFAULT_LANGUAGE,
+    LANGUAGE_LABELS,
+    LANGUAGE_NAMES,
+    OG_LOCALES,
+    STACK,
+    STRINGS,
+    SUPPORTED_LANGUAGES,
+)
 from .models import Project, SiteProfile, SocialLink
 
 LANG_COOKIE = "site_lang"
@@ -209,8 +217,8 @@ def index(request, lang):
         "page_description": strings["hero_tagline"],
         "canonical_url": request.build_absolute_uri(f"/{lang}/"),
         "alternates": [
-            {"code": code, "name": LANGUAGE_NAMES[code], "path": f"/{code}/",
-             "url": request.build_absolute_uri(f"/{code}/")}
+            {"code": code, "name": LANGUAGE_NAMES[code], "label": LANGUAGE_LABELS[code],
+             "path": f"/{code}/", "url": request.build_absolute_uri(f"/{code}/")}
             for code in SUPPORTED_LANGUAGES
         ],
         "x_default_url": request.build_absolute_uri("/"),

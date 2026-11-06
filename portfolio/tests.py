@@ -301,6 +301,14 @@ class IndexPageTests(TestCase):
         self.assertIn('property="og:image:alt" content="Шохзод — ', ru)
         # The old English leftover must be gone from the Uzbek copy.
         self.assertNotIn("production'gaça", self.get("uz"))
+        # Switcher pills carry each language's own script: ÖZ, РУ, EN.
+        for lang in SUPPORTED_LANGUAGES:
+            html = self.get(lang)
+            self.assertIn(">ÖZ</a>", html)
+            self.assertIn(">РУ</a>", html)
+            self.assertIn(">EN</a>", html)
+            self.assertNotIn(">UZ</a>", html)
+            self.assertNotIn(">RU</a>", html)
 
     def test_inactive_project_is_hidden(self):
         Project.objects.filter(slug="roma-food").update(is_active=False)
