@@ -283,6 +283,25 @@ class IndexPageTests(TestCase):
         data = json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>', self.get("ru"), re.S).group(1))
         self.assertEqual((data["name"], data["alternateName"]), ("Shohzod", "Шохзод"))
 
+    def test_each_language_page_stays_in_its_language(self):
+        """Every piece of text follows the page language: the languages fact
+        lists all three languages, the HTML source note is localized, and the
+        Russian page's og: tags use the Cyrillic name."""
+        expectations = {
+            "uz": ("inglizça (asosiy)", "Qiziqib içiga qaraganingiz"),
+            "ru": ("английский (базовый)", "Спасибо, что заглянули"),
+            "en": ("English (basic)", "Thanks for looking under the hood"),
+        }
+        for lang, (langs_value, note_start) in expectations.items():
+            html = self.get(lang)
+            self.assertIn(langs_value, html)
+            self.assertIn(f"<!-- {note_start}", html)
+        ru = self.get("ru")
+        self.assertIn('property="og:site_name" content="Шохзод"', ru)
+        self.assertIn('property="og:image:alt" content="Шохзод — ', ru)
+        # The old English leftover must be gone from the Uzbek copy.
+        self.assertNotIn("production'gaça", self.get("uz"))
+
     def test_inactive_project_is_hidden(self):
         Project.objects.filter(slug="roma-food").update(is_active=False)
         self.assertNotIn('id="p-roma-food"', self.get())
